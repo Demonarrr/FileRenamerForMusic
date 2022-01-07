@@ -5,13 +5,12 @@ MW_MusicRenamerApp::MW_MusicRenamerApp(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MW_MusicRenamerApp)
 {
+   // ui->setupUi(this);//for the moment of writing idk what it's, so don't delete
     //setup main window settings
     //using functions for setup, set and change parts of main window
     addToolBar(Qt::RightToolBarArea, createRightToolBar());
     setCentralWidget(createCentralWidget());
 
-
-    ui->setupUi(this);//for the moment of writing idk what it's, so don't delete
 }
 
 MW_MusicRenamerApp::~MW_MusicRenamerApp()
@@ -19,16 +18,16 @@ MW_MusicRenamerApp::~MW_MusicRenamerApp()
     delete ui;
 }
 
-//metjhods:
+//methods:
 QWidget *MW_MusicRenamerApp::createCentralWidget()
 {
     QWidget *centralWgt = new QWidget(); //this one will be returned
 
-    //here is creating left part of central widget
+    //creating left part of central widget
     QStringListModel *strlm_fileNames = new QStringListModel(m_strl_fileNames_temp, 0);
     QListView *lv_fileNames = new QListView();
     lv_fileNames->setModel(strlm_fileNames);
-    //here is creating of right part of central widget
+    //creating right part of central widget
     QStringListModel *strlm_temp = new  QStringListModel(m_strl_fileNames_temp, 0);
     QListView *lv_renamingResult = new QListView();
     lv_renamingResult->setModel(strlm_temp);
@@ -37,9 +36,10 @@ QWidget *MW_MusicRenamerApp::createCentralWidget()
     QHBoxLayout *hbxl_centralWgtLayout = new QHBoxLayout();
     hbxl_centralWgtLayout->addWidget(lv_fileNames);
     hbxl_centralWgtLayout->addWidget(lv_renamingResult);
+    hbxl_centralWgtLayout->setSpacing(15);
 
     centralWgt->setLayout(hbxl_centralWgtLayout);
-    centralWgt->resize(400, 400);
+
     centralWgt->show();
 
     return centralWgt;
@@ -54,7 +54,15 @@ QToolBar *MW_MusicRenamerApp::createRightToolBar()
                 SIGNAL(clicked()),
                 SLOT(slotChooseFile())
             );
-    rightToolBar->addWidget(pbtn_chooseFile);
+
+    QVBoxLayout *vbxl_rightTB = new QVBoxLayout(); //needed for more beatiful buttons placing
+    vbxl_rightTB->addWidget(pbtn_chooseFile);
+    vbxl_rightTB->setSpacing(5);
+
+    QWidget *wgt_container = new QWidget(); //needed for more beatiful buttons placing
+    wgt_container->setLayout(vbxl_rightTB);
+
+    rightToolBar->addWidget(wgt_container);
 
     ;return rightToolBar;
 }
@@ -65,4 +73,6 @@ QToolBar *MW_MusicRenamerApp::createRightToolBar()
 void MW_MusicRenamerApp::slotChooseFile()
 {
    m_strl_fileNames_temp = QFileDialog::getOpenFileNames(0, "Choose file for rename", "");
+   this->setCentralWidget(createCentralWidget()); //refresh the lists in central wgt
+
 }

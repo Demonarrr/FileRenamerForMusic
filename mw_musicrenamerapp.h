@@ -24,13 +24,10 @@ class MW_MusicRenamerApp : public QMainWindow
     Q_OBJECT
 private:
     //var's and const's
-    QStringList m_strl_fileNames_temp; //feels like bad decision, its possible to do way much better
-
+    QStringList m_strl_fileNames_temp = (QStringList() << "str1" << "str2" << "str3"); ; //feels like bad decision, its possible to do way much better
     //functions
     QToolBar *createRightToolBar();
     QWidget *createCentralWidget();
-
-
 
 public:
     MW_MusicRenamerApp(QWidget *parent = nullptr);
@@ -41,6 +38,5 @@ private:
 
 public slots:
     void slotChooseFile();
-
 };
 #endif // MW_MUSICRENAMERAPP_H
